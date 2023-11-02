@@ -2,13 +2,19 @@
 // http://localhost:3000/login
 
 import * as React from 'react'
-import {fireEvent, render, screen} from '@testing-library/react'
+import {render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
+import faker from 'faker'
 import Login from '../../components/login'
 
-test('submitting the form calls onSubmit with username and password', async () => {
-  let submittedData
+const buildLoginForm = () => {
+  return {
+    username: faker.internet.userName(),
+    password: faker.internet.password(),
+  }
+}
 
+test('submitting the form calls onSubmit with username and password', async () => {
   const mockHandleSubmit = jest.fn()
 
   render(<Login onSubmit={mockHandleSubmit} />)
@@ -16,8 +22,7 @@ test('submitting the form calls onSubmit with username and password', async () =
   const userNameField = screen.getByLabelText('Username')
   const passwordField = screen.getByLabelText('Password')
 
-  const username = 'vee'
-  const password = 'crabbos'
+  const {username, password} = buildLoginForm()
 
   const submit = screen.getByRole('button', {name: 'Submit'})
 
