@@ -11,6 +11,7 @@ import {setupServer} from 'msw/node'
 import {handlers} from '../../test/server-handlers'
 
 import Login from '../../components/login-submission'
+import {createRenderer} from 'react-dom/test-utils'
 
 const buildLoginForm = build({
   fields: {
@@ -46,5 +47,7 @@ test(`invalid log in details triggers a login request failure`, async () => {
 
   await waitForElementToBeRemoved(() => screen.getByLabelText(/loading/i))
 
-  expect(screen.getByText('password required')).toBeVisible()
+  expect(screen.getByRole('alert').textContent).toMatchInlineSnapshot(
+    `"password required"`,
+  )
 })
