@@ -25,7 +25,7 @@ const server = setupServer(...handlers)
 beforeAll(() => server.listen())
 afterAll(() => server.close())
 
-test(`logging in displays the user's username`, async () => {
+it(`displays the username when the correct username and password have been submitted`, async () => {
   render(<Login />)
   const {username, password} = buildLoginForm()
 
@@ -38,7 +38,7 @@ test(`logging in displays the user's username`, async () => {
   expect(screen.getByText(username)).toBeInTheDocument()
 })
 
-test(`invalid log in details triggers a login request failure`, async () => {
+it(`triggers a login request failure when invalid login credentials have been supplied`, async () => {
   render(<Login />)
   const {username} = buildLoginForm()
 
