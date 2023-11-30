@@ -2,7 +2,7 @@
 // http://localhost:3000/counter-hook
 
 import * as React from 'react'
-import {render, screen} from '@testing-library/react'
+import {fireEvent, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useCounter from '../../components/use-counter'
 
@@ -12,11 +12,32 @@ import useCounter from '../../components/use-counter'
 // 💰 here's how to use the hook:
 // const {count, increment, decrement} = useCounter()
 
+const MockCounter = () => {
+  const {count, increment, decrement} = useCounter()
+
+  return (
+    <>
+      <button onClick={increment}>Increment</button>
+      <button onClick={decrement}>Decrement</button>
+      <div>Current count: {count}</div>
+    </>
+  )
+}
+
 test('exposes the count and increment/decrement functions', () => {
-  // 🐨 render the component
-  // 🐨 get the elements you need using screen
-  // 🐨 assert on the initial state of the hook
-  // 🐨 interact with the UI using userEvent and assert on the changes in the UI
+  render(<MockCounter />)
+
+  const increment = screen.getByRole('button', {name: 'Increment'})
+  const decrement = screen.getByRole('button', {name: 'Decrement'})
+  const counter = screen.getByText(/Current count:/)
+
+  fireEvent.click(increment)
+
+  expect(counter).toHaveTextContent('Current count: 1')
+
+  fireEvent.click(decrement)
+
+  expect(counter).toHaveTextContent('Current count: 0')
 })
 
 /* eslint no-unused-vars:0 */
