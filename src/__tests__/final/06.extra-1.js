@@ -23,6 +23,7 @@ test('displays the users current location', async () => {
     setReturnValue = state[1]
     return state[0]
   }
+
   useCurrentPosition.mockImplementation(useMockCurrentPosition)
 
   render(<Location />)
