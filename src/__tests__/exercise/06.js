@@ -11,13 +11,12 @@ jest.mock('react-use-geolocation')
 test('displays the users current location', async () => {
   const fakePosition = {
     coords: {
-      latitude: 53.484642028808594,
-      longitude: -2.2252206802368164,
+      latitude: 35,
+      longitude: 139,
     },
   }
 
   let setReturnValue
-
   function useMockCurrentPosition() {
     const state = React.useState([])
     setReturnValue = state[1]
@@ -26,17 +25,14 @@ test('displays the users current location', async () => {
 
   useCurrentPosition.mockImplementation(useMockCurrentPosition)
 
-
   render(<Location />)
+  expect(screen.getByLabelText(/loading/i)).toBeInTheDocument()
 
-  expect(screen.getByLabelText(/loading/i)).toBeVisible()
-
-  await act(async () => {
-setReturnValue([fakePosition])
+  act(() => {
+    setReturnValue([fakePosition])
   })
 
   expect(screen.queryByLabelText(/loading/i)).not.toBeInTheDocument()
-
   expect(screen.getByText(/latitude/i)).toHaveTextContent(
       `Latitude: ${fakePosition.coords.latitude}`,
   )
