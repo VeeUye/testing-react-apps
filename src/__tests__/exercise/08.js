@@ -2,7 +2,7 @@
 // http://localhost:3000/counter-hook
 
 import * as React from 'react'
-import {fireEvent, render, screen} from '@testing-library/react'
+import {act, fireEvent, render, screen} from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import useCounter from '../../components/use-counter'
 
@@ -38,6 +38,22 @@ test('exposes the count and increment/decrement functions', () => {
   fireEvent.click(decrement)
 
   expect(counter).toHaveTextContent('Current count: 0')
+})
+
+test('also exposes the count and increment/decrement functions', () => {
+  let result
+  const MockCounterWithNoUi = () => {
+    result = useCounter()
+    return null
+  }
+
+  render(<MockCounterWithNoUi />)
+
+  expect(result.count).toBe(0)
+  act(() => result.increment())
+  expect(result.count).toBe(1)
+  act(() => result.decrement())
+  expect(result.count).toBe(0)
 })
 
 /* eslint no-unused-vars:0 */
